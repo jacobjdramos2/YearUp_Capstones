@@ -1,13 +1,13 @@
 package org.example;
 
-public class Finances {
-    String date;
-    String time;
-    String description;
-    String vendor;
-    double amount;
+public class Transaction {
+    private String date;
+    private String time;
+    private String description;
+    private String vendor;
+    private double amount;
 
-    public Finances(String date, String time, String description, String vendor, double amount) {
+    public Transaction(String date, String time, String description, String vendor, double amount) {
         this.date = date;
         this.time = time;
         this.description = description;

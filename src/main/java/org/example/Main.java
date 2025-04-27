@@ -5,7 +5,6 @@ import java.util.Scanner;
 public class Main {
     public static void main(String[] args) {
         String response = HomeScreen();
-        response = response.toLowerCase();
         boolean isValid = false;
 
         while (!isValid) {
@@ -20,7 +19,7 @@ public class Main {
                 isValid = true;
             } else {
                 System.out.println("Please select a valid option!");
-                HomeScreen();
+                response = HomeScreen();
             }
         }
     }
@@ -36,7 +35,7 @@ public class Main {
                 X) Exit.""");
         System.out.println("---------------------------------------------------");
 
-        return sc.nextLine();
+        return sc.nextLine().toLowerCase();
     }
 
     public static String ShowLedger() {
@@ -51,6 +50,6 @@ public class Main {
                 H) Home""");
         System.out.println("---------------------------------------------------");
 
-        return sc.nextLine();
+        return sc.nextLine().toLowerCase();
     }
 }
