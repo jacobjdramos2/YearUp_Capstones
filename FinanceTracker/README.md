@@ -29,6 +29,9 @@ FinanceTracker is a command-line Java application that allows users to track fin
 - **6)** Custom Search 
 
 ---
+## PHOTO 
+<img width="656" alt="Screenshot 2025-05-02 at 10 07 06 AM" src="https://github.com/user-attachments/assets/39f9a55d-ba42-4c7b-9641-e0ef1de7970c" />
+---
 
 ## 🧠 Interesting Code 
 
