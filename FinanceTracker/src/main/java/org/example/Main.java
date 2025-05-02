@@ -1,25 +1,73 @@
 package org.example;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) {
-        String response = HomeScreen();
-        boolean isValid = false;
+        Scanner sc = new Scanner(System.in);
+        Ledger ledger = new Ledger();
+        ledger.loadFromFile("transactions.csv");
 
-        while (!isValid) {
-            if (response.equals("d")) {
-                isValid = true;
-            } else if (response.equals("p")) {
-                isValid = true;
-            } else if (response.equals("l")) {
-                String r = ShowLedger();
-                isValid = true;
-            } else if (response.equals("x")) {
-                isValid = true;
-            } else {
-                System.out.println("Please select a valid option!");
-                response = HomeScreen();
+        // after every new deposit or payment, call: ledger.saveToFile("transactions.csv)
+
+        String response = HomeScreen();
+        boolean running = true;
+
+        while (running) {
+            switch (response) {
+                case "d":
+                    System.out.println("Enter a description: ");
+                    String descD = sc.nextLine();
+
+                    System.out.println("Enter your vendor: ");
+                    String venD = sc.nextLine();
+
+                    System.out.println("Enter amount: ");
+                    double amoD = Double.parseDouble(sc.nextLine());
+
+                    Transaction deposit = new Transaction(
+                            LocalDate.now().toString(),
+                            LocalTime.now().toString(),
+                            descD, venD, amoD
+                    );
+
+                    ledger.addTransaction(deposit);
+                    ledger.saveToFile("transaction.csv");
+                    System.out.println("Recorded deposit.");
+                    break;
+
+                case "p":
+                    System.out.println("Enter a description: ");
+                    String descP = sc.nextLine();
+
+                    System.out.println("Enter your vendor: ");
+                    String venP = sc.nextLine();
+
+                    System.out.println("Enter amount: ");
+                    double amoP = Double.parseDouble(sc.nextLine());
+                    Transaction payment = new Transaction(
+                            LocalDate.now().toString(),
+                            LocalTime.now().toString(),
+                            descP, venP, amoP
+                    );
+
+                    ledger.addTransaction(payment);
+                    ledger.saveToFile("transaction.csv");
+                    System.out.println("Recorded payment.");
+                    break;
+
+                case "l":
+                    String r = ShowLedger();
+                    break;
+
+                case "x":
+                    running = false;
+                    break;
+
+                default:
+                    System.out.println("Please select a valid option!");
             }
         }
     }
