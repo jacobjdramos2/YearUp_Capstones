@@ -8,7 +8,8 @@ public class Ledger {
     ArrayList<Transaction> transactions = new ArrayList<>();
 
     public ArrayList<Transaction> customSearch(String startDateInput, String endDateInput,
-                                               String vendorInput, String descriptionInput, String amountInput) {
+                                               String vendorInput, String descriptionInput,
+                                               String amountInput) {
         ArrayList<Transaction> result = new ArrayList<>();
 
         LocalDate startDate = null;
@@ -17,11 +18,19 @@ public class Ledger {
 
         // Convert string inputs to usable types
         if (!startDateInput.isEmpty()) {
-            startDate = LocalDate.parse(startDateInput);
+            try {
+                startDate = LocalDate.parse(startDateInput);
+            } catch (Exception e) {
+                System.out.println("Invalid input!");
+            }
         }
 
         if (!endDateInput.isEmpty()) {
-            endDate = LocalDate.parse(endDateInput);
+            try {
+                endDate = LocalDate.parse(endDateInput);
+            } catch (Exception e) {
+                System.out.println("Invalid input!");
+            }
         }
 
         if (!amountInput.isEmpty()) {
