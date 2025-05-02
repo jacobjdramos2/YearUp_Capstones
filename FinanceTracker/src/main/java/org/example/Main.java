@@ -2,6 +2,7 @@ package org.example;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Main {
@@ -94,6 +95,7 @@ public class Main {
                 3) Year To Date
                 4) Previous Year
                 5) Search by Vendor
+                6) Custom Search
                 0) Back to Ledger
                 """);
 
@@ -130,6 +132,9 @@ public class Main {
                 for (Transaction t : ledger.searchByVendor(vendor)) {
                     System.out.println(t);
                 }
+                break;
+            case "6":
+                runCustomSearch(sc,ledger);
                 break;
             case "0":
                 return;
@@ -175,6 +180,32 @@ public class Main {
                 showReports(sc, ledger);
             default:
                 System.out.println("Invalid input!");
+        }
+    }
+
+    public static void runCustomSearch(Scanner sc, Ledger ledger) {
+        System.out.println("Enter start date (yyyy-mm-dd) or press Enter to skip:");
+        String startDateInput = sc.nextLine().trim();
+
+        System.out.println("Enter end date (yyyy-mm-dd) or press Enter to skip:");
+        String endDateInput = sc.nextLine().trim();
+
+        System.out.println("Enter vendor name or press Enter to skip:");
+        String vendorInput = sc.nextLine().trim();
+
+        System.out.println("Enter description keyword or press Enter to skip:");
+        String descriptionInput = sc.nextLine().trim();
+
+        System.out.println("Enter exact amount or press Enter to skip:");
+        String amountInput = sc.nextLine().trim();
+
+        ArrayList<Transaction> result = ledger.customSearch(
+                startDateInput, endDateInput, vendorInput, descriptionInput, amountInput
+        );
+
+        System.out.println("Search results:");
+        for (Transaction t : result) {
+            System.out.println(t);
         }
     }
 }

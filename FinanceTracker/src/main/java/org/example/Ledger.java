@@ -7,6 +7,47 @@ import java.util.*;
 public class Ledger {
     ArrayList<Transaction> transactions = new ArrayList<>();
 
+    public ArrayList<Transaction> customSearch(String startDateInput, String endDateInput,
+                                               String vendorInput, String descriptionInput, String amountInput) {
+        ArrayList<Transaction> result = new ArrayList<>();
+
+        LocalDate startDate = null;
+        LocalDate endDate = null;
+        Double amount = null;
+
+        // Convert string inputs to usable types
+        if (!startDateInput.isEmpty()) {
+            startDate = LocalDate.parse(startDateInput);
+        }
+
+        if (!endDateInput.isEmpty()) {
+            endDate = LocalDate.parse(endDateInput);
+        }
+
+        if (!amountInput.isEmpty()) {
+            try {
+                amount = Double.parseDouble(amountInput);
+            } catch (NumberFormatException e) {
+                System.out.println("Invalid amount. Skipping amount filter.");
+            }
+        }
+
+        for (Transaction t : transactions) {
+            LocalDate tDate = t.getLocalDate();
+
+            if (startDate != null && tDate.isBefore(startDate)) continue;
+            if (endDate != null && tDate.isAfter(endDate)) continue;
+            if (!vendorInput.isEmpty() && !t.getVendor().toLowerCase().contains(vendorInput.toLowerCase())) continue;
+            if (!descriptionInput.isEmpty() && !t.getDescription().toLowerCase().contains(descriptionInput.toLowerCase())) continue;
+            if (amount != null && t.getAmount() != amount) continue;
+
+            result.add(t);
+        }
+
+        return result;
+    }
+
+
     public ArrayList<Transaction> getMonthToDate() {
         ArrayList<Transaction> result = new ArrayList<>();
         LocalDate now = LocalDate.now();
