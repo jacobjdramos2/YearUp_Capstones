@@ -1,6 +1,6 @@
 # 💰 FinanceTracker - Java CLI Accounting Ledger
 
-FinanceTracker is a command-line Java application that allows users to track financial transactions — including deposits, payments, and customized financial reports. It's designed for personal or small business use and stores all data in a `transactions.csv` file for persistence.
+FinanceTracker is a command-line Java application that allows users to track financial transactions — including deposits, payments, and customized financial reports. 
 
 ---
 
@@ -26,23 +26,58 @@ FinanceTracker is a command-line Java application that allows users to track fin
 - **4)** Previous Year
 - **5)** Search by Vendor
 - **0)** Back to Ledger
-- *(Optional)* **6)** Custom Search (if implemented)
+- **6)** Custom Search 
 
 ---
 
-## 🧠 Interesting Code Example
-
-This method filters transactions for the current month using `LocalDate`:
+## 🧠 Interesting Code 
 
 ```java
-public ArrayList<Transaction> getMonthToDate() {
-    ArrayList<Transaction> result = new ArrayList<>();
-    LocalDate now = LocalDate.now();
-    for (Transaction t : transactions) {
-        LocalDate tDate = t.getLocalDate();
-        if (tDate.getYear() == now.getYear() && tDate.getMonth() == now.getMonth()) {
+    public ArrayList<Transaction> customSearch(String startDateInput, String endDateInput,
+                                               String vendorInput, String descriptionInput,
+                                               String amountInput) {
+        ArrayList<Transaction> result = new ArrayList<>();
+
+        LocalDate startDate = null;
+        LocalDate endDate = null;
+        Double amount = null;
+
+        // Convert string inputs to usable types
+        if (!startDateInput.isEmpty()) {
+            try {
+                startDate = LocalDate.parse(startDateInput);
+            } catch (Exception e) {
+                System.out.println("Invalid input!");
+            }
+        }
+
+        if (!endDateInput.isEmpty()) {
+            try {
+                endDate = LocalDate.parse(endDateInput);
+            } catch (Exception e) {
+                System.out.println("Invalid input!");
+            }
+        }
+
+        if (!amountInput.isEmpty()) {
+            try {
+                amount = Double.parseDouble(amountInput);
+            } catch (NumberFormatException e) {
+                System.out.println("Invalid amount. Skipping amount filter.");
+            }
+        }
+
+        for (Transaction t : transactions) {
+            LocalDate tDate = t.getLocalDate();
+
+            if (startDate != null && tDate.isBefore(startDate)) continue;
+            if (endDate != null && tDate.isAfter(endDate)) continue;
+            if (!vendorInput.isEmpty() && !t.getVendor().toLowerCase().contains(vendorInput.toLowerCase())) continue;
+            if (!descriptionInput.isEmpty() && !t.getDescription().toLowerCase().contains(descriptionInput.toLowerCase())) continue;
+            if (amount != null && t.getAmount() != amount) continue;
+
             result.add(t);
         }
+
+        return result;
     }
-    return result;
-}
