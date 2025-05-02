@@ -1,5 +1,8 @@
 package org.example;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+
 public class Transaction {
     private String date;
     private String time;
@@ -21,6 +24,11 @@ public class Transaction {
 
     public void setDate(String date) {
         this.date = date;
+    }
+
+    public LocalDate getLocalDate() {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        return LocalDate.parse(date,formatter);
     }
 
     public String getTime() {
@@ -53,5 +61,11 @@ public class Transaction {
 
     public void setAmount(double amount) {
         this.amount = amount;
+    }
+
+    @Override
+    public String toString() {
+        return String.format("%s %s | %-20s | %-15s | $%8.2f",
+                date, time, description, vendor, amount);
     }
 }

@@ -1,10 +1,75 @@
 package org.example;
 
 import java.io.*;
+import java.time.LocalDate;
 import java.util.*;
 
 public class Ledger {
     ArrayList<Transaction> transactions = new ArrayList<>();
+
+    public ArrayList<Transaction> getMonthToDate() {
+        ArrayList<Transaction> result = new ArrayList<>();
+        LocalDate now = LocalDate.now();
+        for (Transaction t : transactions) {
+            LocalDate tDate = t.getLocalDate();
+            if (tDate.getYear() == now.getYear() && tDate.getMonth() == now.getMonth()) {
+                result.add(t);
+            }
+        }
+
+        return result;
+    }
+
+    public ArrayList<Transaction> getPreviousMonth() {
+        ArrayList<Transaction> result = new ArrayList<>();
+        LocalDate now = LocalDate.now();
+        LocalDate prevMonth = now.minusMonths(1);
+        for (Transaction t : transactions) {
+            LocalDate tDate = t.getLocalDate();
+            if (tDate.getYear() == prevMonth.getYear() && tDate.getMonth() == prevMonth.getMonth()) {
+                result.add(t);
+            }
+        }
+
+        return result;
+    }
+
+    public ArrayList<Transaction> getYearToDate() {
+        ArrayList<Transaction> result = new ArrayList<>();
+        LocalDate now = LocalDate.now();
+        for (Transaction t : transactions) {
+            LocalDate tDate = t.getLocalDate();
+            if (tDate.getYear() == now.getYear()) {
+                result.add(t);
+            }
+        }
+
+        return result;
+    }
+
+    public ArrayList<Transaction> getPreviousYear() {
+        ArrayList<Transaction> result = new ArrayList<>();
+        LocalDate now = LocalDate.now();
+        int lastYear = now.getYear()-1;
+        for (Transaction t : transactions) {
+            if (t.getLocalDate().getYear() == lastYear) {
+                result.add(t);
+            }
+        }
+
+        return result;
+    }
+
+    public ArrayList<Transaction> searchByVendor(String name) {
+        ArrayList<Transaction> result = new ArrayList<>();
+        for (Transaction t : transactions) {
+            if (t.getVendor().equalsIgnoreCase(name)) {
+                result.add(t);
+            }
+        }
+
+        return result;
+    }
 
     public void addTransaction(Transaction transaction) {
         transactions.add(transaction);

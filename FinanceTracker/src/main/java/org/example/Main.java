@@ -12,7 +12,7 @@ public class Main {
 
         // after every new deposit or payment, call: ledger.saveToFile("transactions.csv)
 
-        String response = HomeScreen();
+        String response = homeScreen();
         boolean running = true;
 
         while (running) {
@@ -34,7 +34,7 @@ public class Main {
                     );
 
                     ledger.addTransaction(deposit);
-                    ledger.saveToFile("transaction.csv");
+                    ledger.saveToFile("transactions.csv");
                     System.out.println("Recorded deposit.");
                     break;
 
@@ -54,12 +54,12 @@ public class Main {
                     );
 
                     ledger.addTransaction(payment);
-                    ledger.saveToFile("transaction.csv");
+                    ledger.saveToFile("transactions.csv");
                     System.out.println("Recorded payment.");
                     break;
 
                 case "l":
-                    String r = ShowLedger();
+                    showLedger(sc, ledger);
                     break;
 
                 case "x":
@@ -72,7 +72,7 @@ public class Main {
         }
     }
 
-    public static String HomeScreen() {
+    public static String homeScreen() {
         Scanner sc = new Scanner(System.in);
         System.out.println("---------------------------------------------------");
         System.out.println("""
@@ -86,18 +86,95 @@ public class Main {
         return sc.nextLine().toLowerCase();
     }
 
-    public static String ShowLedger() {
-        Scanner sc = new Scanner(System.in);
+    public static void showReports(Scanner sc, Ledger ledger) {
+        System.out.println("""
+                Reports:
+                1) Month to Date
+                2) Previous Month
+                3) Year To Date
+                4) Previous Year
+                5) Search by Vendor
+                0) Back to Ledger
+                """);
+
+        String choice = sc.nextLine();
+
+        switch (choice) {
+            case "1":
+                System.out.println("Month To Date:");
+                for (Transaction t : ledger.getMonthToDate()) {
+                    System.out.println(t);
+                }
+                break;
+            case "2":
+                System.out.println("Previous Month:");
+                for (Transaction t : ledger.getPreviousMonth()) {
+                    System.out.println(t);
+                }
+                break;
+            case "3":
+                System.out.println("Year To Date:");
+                for (Transaction t : ledger.getYearToDate()) {
+                    System.out.println(t);
+                }
+                break;
+            case "4":
+                System.out.println("Previous Year:");
+                for (Transaction t : ledger.getPreviousYear()) {
+                    System.out.println(t);
+                }
+                break;
+            case "5":
+                System.out.print("Enter vendor name: ");
+                String vendor = sc.nextLine();
+                for (Transaction t : ledger.searchByVendor(vendor)) {
+                    System.out.println(t);
+                }
+                break;
+            case "0":
+                return;
+            default:
+                System.out.println("Invalid input.");
+        }
+    }
+
+    public static void showLedger(Scanner sc, Ledger ledger) {
         System.out.println("---------------------------------------------------");
         System.out.println("""
                 Please select the following options:
-                A) Add deposit.\s
-                D) Make Payment (Debit).\s
-                P) Ledger.\s
-                R) Exit.\s
+                A) All transactions.\s
+                D) Deposits.\s
+                P) Payments\s
+                R) Reports\s
                 H) Home""");
         System.out.println("---------------------------------------------------");
 
-        return sc.nextLine().toLowerCase();
+        String response = sc.nextLine().toLowerCase();
+
+        switch (response) {
+            case "a":
+                System.out.println("All transactions:");
+                for (Transaction t : ledger.allEntries()) {
+                    System.out.println(t);
+                }
+                break;
+            case "d":
+                System.out.println("Deposits:");
+                for (Transaction t : ledger.getDeposits()) {
+                    System.out.println(t);
+                }
+                break;
+            case "p":
+                System.out.println("Payments:");
+                for (Transaction t : ledger.getPayments()) {
+                    System.out.println(t);
+                }
+                break;
+            case "r":
+                System.out.println("Reports:");
+                showReports(sc, ledger);
+            default:
+                System.out.println("Invalid input!");
+        }
     }
 }
